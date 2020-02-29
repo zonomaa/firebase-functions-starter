@@ -4,7 +4,7 @@ const pkg = require('../package');
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MODE = process.env.NODE_ENV;
-const externals = ['firebase-admin', 'firebase-functions'];
+const dependencies = Object.keys(pkg.dependencies).map(x => x);
 
 const genPackage = () => ({
   name: 'functions',
@@ -14,7 +14,7 @@ const genPackage = () => ({
   engines: {
     node: '10',
   },
-  dependencies: externals.reduce(
+  dependencies: dependencies.reduce(
     (acc, name) =>
       Object.assign({}, acc, {
         [name]: pkg.dependencies[name] || pkg.devDependencies[name],
@@ -63,7 +63,7 @@ module.exports = {
       }),
     ],
   },
-  externals: externals.reduce(
+  externals: dependencies.reduce(
     (acc, name) => Object.assign({}, acc, { [name]: true }),
     {}
   ),
